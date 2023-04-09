@@ -6,13 +6,17 @@ import { Link, useForm, usePage } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
 import { FormEventHandler } from 'react';
 import { PageProps } from '@/types';
+import Checkbox from '@/Components/Checkbox';
 
 export default function UpdateProfileInformation({ mustVerifyEmail, status, className = '' }: { mustVerifyEmail: boolean, status?: string, className?: string }) {
     const user = usePage<PageProps>().props.auth.user;
 
     const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
         name: user.name,
+        username: user.username,
         email: user.email,
+        phone: user.phone,
+        role: user.role,
     });
 
     const submit: FormEventHandler = (e) => {
@@ -49,6 +53,21 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                 </div>
 
                 <div>
+                    <InputLabel htmlFor="username" value="Username" />
+
+                    <TextInput
+                        id="username"
+                        className="mt-1 block w-full"
+                        value={data.username}
+                        onChange={(e) => setData('username', e.target.value)}
+                        required
+                        autoComplete="username"
+                    />
+
+                    <InputError className="mt-2" message={errors.username} />
+                </div>
+
+                <div>
                     <InputLabel htmlFor="email" value="Email" />
 
                     <TextInput
@@ -62,6 +81,43 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                     />
 
                     <InputError className="mt-2" message={errors.email} />
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="phone" value="Phone" />
+
+                    <TextInput
+                        id="phone"
+                        className="mt-1 block w-full"
+                        value={data.phone}
+                        onChange={(e) => setData('phone', e.target.value)}
+                        required
+                        autoComplete="phone"
+                    />
+
+                    <InputError className="mt-2" message={errors.phone} />
+                </div>
+                <div>
+                    <InputLabel htmlFor="role" value="Role" />
+                        <Checkbox
+                            id="role"
+                            name="role"
+                            value="residential"
+                            checked={data.role === 'residential'}
+                            onChange={(e) => setData('role', e.target.value)}
+                        >
+                            Residential
+                        </Checkbox>
+                        <Checkbox
+                            id="role"
+                            name="role"
+                            value="commercial"
+                            checked={data.role === 'commercial'}
+                            onChange={(e) => setData('role', e.target.value)}
+                        >
+                            Commercial
+                        </Checkbox>
+                    <InputError className="mt-2" message={errors.role} />
                 </div>
 
                 {mustVerifyEmail && user.email_verified_at === null && (

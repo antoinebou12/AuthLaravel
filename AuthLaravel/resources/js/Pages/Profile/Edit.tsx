@@ -1,15 +1,23 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import DeleteUserForm from './Partials/DeleteUserForm';
-import UpdatePasswordForm from './Partials/UpdatePasswordForm';
-import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm';
-import { Head } from '@inertiajs/react';
-import { PageProps } from '@/types';
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import DeleteUserForm from "./Partials/DeleteUserForm";
+import UpdatePasswordForm from "./Partials/UpdatePasswordForm";
+import UpdateProfileInformationForm from "./Partials/UpdateProfileInformationForm";
+import { Head } from "@inertiajs/react";
+import { PageProps } from "@/types";
 
-export default function Edit({ auth, mustVerifyEmail, status }: PageProps<{ mustVerifyEmail: boolean, status?: string }>) {
+export default function Edit({
+    auth,
+    mustVerifyEmail,
+    status,
+}: PageProps<{ mustVerifyEmail: boolean; status?: string }>) {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Profile</h2>}
+            header={
+                <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                    Profile
+                </h2>
+            }
         >
             <Head title="Profile" />
 
@@ -24,21 +32,47 @@ export default function Edit({ auth, mustVerifyEmail, status }: PageProps<{ must
                     </div>
                     <div className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                         <div className="max-w-xl">
-                            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">Two Factor Authentication</h3>
-                            <div className="mt-5">
-                                <a href="#" className="text-red-600 hover:text-red-900">Manage two factor authentication</a>
-                            </div>
+                            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+                                Two Factor Authentication
+                            </h3>
                             <div className="mt-4 space-y-6">
                                 <div className="flex items-center">
                                     <div className="flex-shrink-0 h-10 w-10">
-                                        {auth.user['2fa'] ? (
-                                            <svg className="h-10 w-10 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                        {mustVerifyEmail ? (
+                                            <svg
+                                                className="h-10 w-10 text-green-500"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M5 13l4 4L19 7"
+                                                />
                                             </svg>
                                         ) : (
-                                            <svg className="h-10 w-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                            </svg>
+                                            <><div className="mt-5">
+                                                    <a
+                                                        href="verify-email"
+                                                        className="text-red-600 hover:text-red-900"
+                                                    >
+                                                        Manage two factor authentication
+                                                    </a>
+                                                </div><svg
+                                                    className="h-10 w-10 text-gray-400"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    stroke="currentColor"
+                                                >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth={2}
+                                                            d="M6 18L18 6M6 6l12 12" />
+                                                    </svg></>
+
                                         )}
                                     </div>
                                     <div className="ml-4 text-sm leading-5 font-medium text-gray-900 dark:text-gray-100">
@@ -46,11 +80,7 @@ export default function Edit({ auth, mustVerifyEmail, status }: PageProps<{ must
                                     </div>
                                 </div>
                                 <div className="flex items-center">
-                                    <div className="flex-shrink-0 h-10 w-10">
-                                        {
-                                            auth.user['recover_code']
-                                        }
-                                    </div>
+                                    <div className="flex-shrink-0 h-10 w-10"></div>
                                     <div className="ml-4 text-sm leading-5 font-medium text-gray-900 dark:text-gray-100">
                                         Recovery codes
                                     </div>
@@ -66,6 +96,6 @@ export default function Edit({ auth, mustVerifyEmail, status }: PageProps<{ must
                     </div>
                 </div>
             </div>
-        </AuthenticatedLayout >
+        </AuthenticatedLayout>
     );
 }

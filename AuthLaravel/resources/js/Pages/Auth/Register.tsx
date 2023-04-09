@@ -3,6 +3,7 @@ import GuestLayout from '@/Layouts/GuestLayout';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
+import Checkbox from '@/Components/Checkbox';
 import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
 import PasswordStrengthBar from 'react-password-strength-bar';
@@ -10,7 +11,9 @@ import PasswordStrengthBar from 'react-password-strength-bar';
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
+        username: '',
         email: '',
+        phone: '',
         role: '',
         password: '',
         password_confirmation: '',
@@ -24,6 +27,10 @@ export default function Register() {
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
+
+        if (data.role === '') {
+            setData('role', 'residential');
+        }
 
         post(route('register'));
     };
@@ -47,6 +54,23 @@ export default function Register() {
                     />
                     <InputError message={errors.name} className="mt-2" />
                 </div>
+
+                <div>
+                    <InputLabel htmlFor="username" value="Username" />
+
+                    <TextInput
+                        id="username"
+                        name="username"
+                        value={data.username}
+                        className="mt-1 block w-full"
+                        autoComplete="username"
+                        isFocused={true}
+                        onChange={(e) => setData('username', e.target.value)}
+                        required
+                    />
+                    <InputError message={errors.username} className="mt-2" />
+                </div>
+
                 <div className="mt-4">
                     <InputLabel htmlFor="email" value="Email" />
                     <TextInput
@@ -55,7 +79,7 @@ export default function Register() {
                         name="email"
                         value={data.email}
                         className="mt-1 block w-full"
-                        autoComplete="username"
+                        autoComplete="email"
                         onChange={(e) => setData('email', e.target.value)}
                         required
                     />
@@ -63,19 +87,45 @@ export default function Register() {
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="role" value="Role" />
-                        <select
-                            id="role"
-                            name="role"
-                            value={data.role}
-                            className="mt-1 block w-full"
-                            onChange={(e) => setData('role', e.target.value)}
-                            required
-                        >
-                            <option value="">Select Role</option>
-                            <option value="admin">Admin</option>
-                            <option value="user">User</option>
-                        </select>
+                    <InputLabel htmlFor="phone" value="Phone" />
+                    <TextInput
+                        id="phone"
+                        type="tel"
+                        name="phone"
+                        value={data.phone}
+                        className="mt-1 block"
+                        autoComplete="phone"
+                        onChange={(e) => setData('phone', e.target.value)}
+                        required
+                    />
+                    <InputError message={errors.phone} className="mt-2" />
+                </div>
+
+                <div className="mt-4">
+                    <div className="flex">
+                        <div className="flex-grow">
+                            <InputLabel htmlFor="ResidentialRole" value="Residential" />
+                            <Checkbox
+                                id="ResidentialRole"
+                                name="ResidentialRole"
+                                value="residential"
+                                className="mt-1 block"
+                                checked={data.role === 'residential'}
+                                onChange={(e) => setData('role', e.target.checked ? 'residential' : '')}
+                            />
+                        </div>
+                        <div className="flex-grow">
+                            <InputLabel htmlFor="BusinessRole" value="Business" />
+                            <Checkbox
+                                id="BusinessRole"
+                                name="BusinessRole"
+                                value="business"
+                                className="mt-1 block"
+                                checked={data.role === 'business'}
+                                onChange={(e) => setData('role', e.target.checked ? 'business' : '')}
+                            />
+                        </div>
+                    </div>
                     <InputError message={errors.role} className="mt-2" />
                 </div>
 

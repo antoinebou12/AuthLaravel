@@ -8,9 +8,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use App\Models\User;
 
 class LoginRequest extends FormRequest
 {
+
+    protected $inputType;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -27,7 +31,8 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'email' => ['required_without:username', 'string', 'email', 'exists:users,email'],
+            'username' => ['required_without:email', 'string', 'exists:users,username'],
             'password' => ['required', 'string'],
         ];
     }
@@ -41,13 +46,19 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        print_r($this->only($this->inputType, 'password'));
+
+        if (! Auth::attempt($this->only($this->inputType, 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                $this->inputType => trans('auth.failed'),
             ]);
         }
+
+        RateLimiter::clear($this->throttleKey());
+        Auth::user()->login_attempts = 0;
+        Auth::user()->save();
 
         RateLimiter::clear($this->throttleKey());
     }
@@ -59,10 +70,15 @@ class LoginRequest extends FormRequest
      */
     public function ensureIsNotRateLimited(): void
     {
+
         if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+            $user = User::where("email", $this->input('email'))->orWhere("username", $this->input('username'))->first();
+            if ($user) {
+                $user->login_attempts++;
+                $user->save();
+            }
             return;
         }
-
         event(new Lockout($this));
 
         $seconds = RateLimiter::availableIn($this->throttleKey());
@@ -81,5 +97,17 @@ class LoginRequest extends FormRequest
     public function throttleKey(): string
     {
         return Str::transliterate(Str::lower($this->input('email')).'|'.$this->ip());
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'email' => $this->input('email'),
+            'username' => $this->input('username'),
+        ]);
+        $this->inputType = filter_var($this->input('input_type'), FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        $this->merge([
+            $this->inputType => $this->input('input_type'),
+        ]);
     }
 }

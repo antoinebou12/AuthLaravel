@@ -31,7 +31,7 @@ Route::get('/dashboard', function () {
 
 Route::get('/admin_dashboard', function () {
     return Inertia::render('AdminDashboard');
-})->middleware(['auth', 'admin'])->name('admin');
+})->middleware(['auth', 'admin'])->name('admin_dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
