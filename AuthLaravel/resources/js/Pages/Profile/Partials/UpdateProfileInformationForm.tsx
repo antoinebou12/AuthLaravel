@@ -97,7 +97,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
 
                     <InputError className="mt-2" message={errors.phone} />
                 </div>
-                <div>
+                {/* <div>
                     <InputLabel htmlFor="role" value="Role" />
                         <Checkbox
                             id="role"
@@ -118,7 +118,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                             Commercial
                         </Checkbox>
                     <InputError className="mt-2" message={errors.role} />
-                </div>
+                </div> */}
 
                 {mustVerifyEmail && user.email_verified_at === null && (
                     <div>

@@ -1,4 +1,4 @@
-import { useEffect, FormEventHandler } from 'react';
+import { useEffect, FormEventHandler, useRef } from 'react';
 import GuestLayout from '@/Layouts/GuestLayout';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
@@ -7,6 +7,7 @@ import Checkbox from '@/Components/Checkbox';
 import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
 import PasswordStrengthBar from 'react-password-strength-bar';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -19,6 +20,8 @@ export default function Register() {
         password_confirmation: '',
     });
 
+    const recaptchaRef = useRef<ReCAPTCHA>(null);
+
     useEffect(() => {
         return () => {
             reset('password', 'password_confirmation');
@@ -27,6 +30,10 @@ export default function Register() {
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
+
+        if (recaptchaRef) {
+            recaptchaRef.current?.execute();
+        }
 
         if (data.role === '') {
             setData('role', 'residential');
@@ -163,6 +170,12 @@ export default function Register() {
 
                     <InputError message={errors.password_confirmation} className="mt-2" />
                 </div>
+
+                <ReCAPTCHA
+                    ref={recaptchaRef}
+                    size="invisible"
+                    sitekey="6LcZy9IZAAA"
+                />
 
                 <div className="flex items-center justify-end mt-4">
                     <Link
