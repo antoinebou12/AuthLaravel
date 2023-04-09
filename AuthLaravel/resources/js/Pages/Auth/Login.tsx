@@ -16,7 +16,7 @@ export default function Login({
 }) {
     const { data, setData, post, processing, errors, reset } = useForm({
         email: "",
-        username: "",
+        // username: "",
         input_type: "",
         password: "",
         remember: false,
@@ -24,7 +24,7 @@ export default function Login({
 
     useEffect(() => {
         setData("email", data.input_type);
-        setData("username", data.input_type);
+        // setData("username", data.input_type);
         return () => {
             reset("password");
         };
@@ -40,7 +40,7 @@ export default function Login({
             setData({
                 ...data,
                 input_type: value,
-                username: username,
+                // username: username,
             });
         } else {
             // remove username from data object optional
