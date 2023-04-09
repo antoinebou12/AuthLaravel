@@ -22,6 +22,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'provider',
+        'provider_id',
+        'provider_token'
     ];
 
     /**
@@ -31,7 +34,6 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $hidden = [
         'login_attempts',
-        '2fa_code',
         'password',
         'remember_token',
     ];
@@ -43,14 +45,23 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'last_login' => 'datetime',
     ];
 
-    /**
-     * @param string $role
-     * @return bool
-     */
-    public function hasRole(string $role): bool
+    public static function generateUserName($username)
     {
-        return $this->getAttribute('role') === $role;
+        if($username === null){
+            $username = Str::lower(Str::random(8));
+        }
+        if(User::where('username', $username)->exists()){
+            $newUsername = $username.Str::lower(Str::random(3));
+            $username = self::generateUserName($newUsername);
+        }
+        return $username;
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
     }
 }

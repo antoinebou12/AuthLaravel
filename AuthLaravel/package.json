@@ -28,6 +28,7 @@
     "dependencies": {
         "react-google-recaptcha": "^2.1.0",
         "react-password-strength-bar": "^0.4.1",
+        "react-three-fiber": "^6.0.13",
         "three": "^0.151.3",
         "three.js": "^0.77.1"
     }
