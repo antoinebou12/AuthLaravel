@@ -2,7 +2,11 @@
 
 ## Description
 
-This is a simple project to learn how to use Laravel and Vue.js
+This is a simple project to learn how to use Laravel and Vue.js GTI619 LAB 5
+
+![your-UML-diagram-name](http://www.plantuml.com/plantuml/dpng/PL3BQWCn3BpxAzGzjRHxwDMdBMplfOyFCBjgA_0Zs384GluzMX5YXxtO6aapdl5Ks6MkmPi7_iU0492TDsRnhXJuOV9K76FDS3808wqMAF9MnXGi5CuK_pOO4i_u8IJikpbvmPzoclDLL96gzH9j_5R5I6JwfSKnfQYhp-xMnVpOyLvW__2JxOqtvIyiHGHRakQpjlrxiinMgTwF1yfgny8i-9k29ke_Q7WTO1prqi2x83BifTNElZrXN6lm5m00)
+
+![](http://www.plantuml.com/plantuml/duml/XP5HIiSm3CRVUue-Tk0kC4Gcp0SV154yGEmo3MpfI5FnIfx3Yqb7cMuM_e_vylMNVaaV5KJJCXlm6iI-ACqKGJ69MK6KFAt0Qc-JlYChJUH1AV2X-OmndhMdCACnVt2slVb7wIpi2ehZi5pP9UY0Zn0ZDkRihpC-lhza0ppiJzqbIlvUPyEh8fFa8W-lMqkwpdf1b5Avz9kiCKKykD-GKL3k1rVlZpWHaznzhYJRBDSSrdNTjfMiiQowHnxprNu0)
 
 ## Installation
 
