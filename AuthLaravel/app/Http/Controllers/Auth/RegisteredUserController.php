@@ -36,17 +36,19 @@ class RegisteredUserController extends Controller
             'username' => 'required|string|max:255|unique:'.User::class,
             'email' => 'required|string|email|max:255|unique:'.User::class,
             'phone' => 'required|string|max:255|unique:'.User::class,
-            'roles' => 'required|string|in:roles:user,roles:residential,roles:business',
+            'roles' => 'required|string',
             'permissions' => 'required|string|in:permissions:user',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        if ($request->roles === 'roles:admin') {
+        if (!in_array($request->roles, ['roles:user', 'roles:residential', 'roles:business'])) {
             // error message
             return redirect()->back();
         }
-
-        // roles:
+        if (!in_array($request->permissions, ['permissions:user'])) {
+            // error message
+            return redirect()->back();
+        }
 
         $user = User::create([
             'name' => $request->name,
@@ -59,6 +61,8 @@ class RegisteredUserController extends Controller
             'login_attempts' => 0,
             'browser' => $this->getBrowser( $request->header('User-Agent') ),
             'os' => $this->getOS( $request->header('User-Agent') ),
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
         event(new Registered($user));

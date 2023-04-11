@@ -59,7 +59,7 @@ export default function Dashboard({ auth }: PageProps) {
                                 />
                             </>
                         )}
-                        {auth.user.roles === "roles:users" && (
+                        {auth.user.roles === "roles:user" && (
                             <>
                                 <p className="mt-1 text-sm text-gray-900 dark:text-gray-100">
                                     Users

@@ -15,7 +15,7 @@ export default function Register() {
         username: '',
         email: '',
         phone: '',
-        roles: '',
+        roles: 'roles:residential',
         permissions: 'permissions:user',
         password: '',
         password_confirmation: '',
@@ -35,17 +35,20 @@ export default function Register() {
         if (recaptchaRef) {
             recaptchaRef.current?.execute();
         }
+        // get value from residential checkbox
+        const residential = document.getElementById('ResidentialRoles') as HTMLInputElement;
+        const business = document.getElementById('BusinessRoles') as HTMLInputElement;
 
-        if (data.roles === '') {
+        // set value to roles
+        if (residential.checked) {
             setData('roles', 'roles:residential');
+        } else if (business.checked) {
+            setData('roles', 'roles:business');
         }
+
 
         if (data.permissions === '') {
             setData('permissions', 'permissions:user');
-        }
-
-        if (data.username === '') {
-            setData('username', data.username);
         }
 
         post(route('register'));
@@ -60,6 +63,7 @@ export default function Register() {
 
                     <TextInput
                         id="name"
+                        type="text"
                         name="name"
                         value={data.name}
                         className="mt-1 block w-full"
@@ -76,6 +80,7 @@ export default function Register() {
 
                     <TextInput
                         id="username"
+                        type="text"
                         name="username"
                         value={data.username}
                         className="mt-1 block w-full"
@@ -127,7 +132,7 @@ export default function Register() {
                                 value="residentialCheck"
                                 className="mt-1 block"
                                 disabled={data.roles === 'roles:business'}
-                                onChange={(e) => setData('roles', e.target.checked ? 'roles:residential' : '')}
+                                onChange={(e) => setData('roles', e.target.checked ? 'roles:residential' : 'roles:business')}
                             />
                         </div>
                         <div className="flex-grow">
@@ -138,7 +143,7 @@ export default function Register() {
                                 value="businessCheck"
                                 className="mt-1 block"
                                 disabled={data.roles === 'roles:residential'}
-                                onChange={(e) => setData('roles', e.target.checked ? 'roles:business' : '')}
+                                onChange={(e) => setData('roles', e.target.checked ? 'roles:business' : 'roles:residential')}
                             />
                         </div>
                     </div>

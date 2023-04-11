@@ -18,10 +18,12 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'role',
         'name',
+        'username',
         'email',
         'phone',
+        'roles',
+        'permissions',
         'password',
         'provider',
         'provider_id',
@@ -47,6 +49,9 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
         'last_login' => 'datetime',
+        'last_logout' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     public static function generateUserName($username)
