@@ -22,7 +22,6 @@ export default function Welcome({
             `}</style>
             <Head title="Welcome" />
             <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
-                <ThreeScene />
                 {auth.user ? (
                     <>
                         <div className="bg-white dark:bg-gray-800 shadow flex justify-center">
@@ -33,16 +32,16 @@ export default function Welcome({
                                 Dashboard
                             </Link>
                         </div>
-                        <div className="absolute top-0 right-0 mt-4 mr-4">
-                            <div className="w-full max-w-md">
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center">
+                        <div className="flex items-center justify-center min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+                            <div className="max-w-md w-full space-y-8">
+                                <div className="bg-white dark:bg-gray-800 shadow rounded-lg py-8 px-4 sm:px-10">
+                                    <div className="flex items-center justify-center">
                                         <img
                                             className="w-auto h-12 mx-auto"
                                             src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
                                             alt="Workflow"
                                         />
-                                        <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900 dark:text-white">
+                                        <h2 className="ml-2 text-3xl font-extrabold text-gray-900 dark:text-gray-100">
                                             Welcome to Inertia.js + Laravel
                                         </h2>
                                     </div>
@@ -119,18 +118,18 @@ export default function Welcome({
                                 Register
                             </Link>
                         </div>
-
-                        <div className="absolute top-0 right-0 mt-4 mr-4">
-                            <div className="w-full max-w-md">
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center">
+                        <div className="flex items-center justify-center min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+                            <div className="max-w-md w-full space-y-8">
+                                <div className="bg-white dark:bg-gray-800 shadow rounded-lg py-8 px-4 sm:px-10">
+                                    <div className="flex items-center justify-center">
                                         <img
                                             className="w-auto h-12 mx-auto"
                                             src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
                                             alt="Workflow"
                                         />
-                                        <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900 dark:text-white">
+                                        <h2 className="ml-2 text-3xl font-extrabold text-gray-900 dark:text-gray-100">
                                             Welcome to Inertia.js + Laravel
+                                            {/* <ThreeScene className="w-1/2 h-1/2" /> */}
                                         </h2>
                                     </div>
                                     <div className="mt-8">

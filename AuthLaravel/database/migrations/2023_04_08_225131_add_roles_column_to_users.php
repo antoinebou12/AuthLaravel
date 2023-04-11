@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddRoleColumnToUsers extends Migration
+class AddRolesColumnToUsers extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,8 @@ class AddRoleColumnToUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->enum('role', ['admin', 'user', 'residential', 'business'])->default('user');
+            $table->enum('roles', ['roles:admin', 'roles:user', 'roles:residential', 'roles:business'])->default('roles:user');
+            $table->enum('permissions', ['permissions:admin', 'permissions:user'])->default('permissions:user');
         });
     }
 
@@ -26,7 +27,8 @@ class AddRoleColumnToUsers extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('role');
+            $table->dropColumn('roles');
+            $table->dropColumn('permissions');
         });
     }
 };

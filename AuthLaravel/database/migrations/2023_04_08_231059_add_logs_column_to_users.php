@@ -20,7 +20,6 @@ class AddLogsColumnToUsers extends Migration
             $table->timestamp('last_logout')->nullable();
             $table->string('browser')->nullable();
             $table->string('os')->nullable();
-            $table->string('device')->nullable();
         });
     }
 
@@ -38,7 +37,6 @@ class AddLogsColumnToUsers extends Migration
             $table->dropColumn('last_logout');
             $table->dropColumn('browser');
             $table->dropColumn('os');
-            $table->dropColumn('device');
         });
     }
 };

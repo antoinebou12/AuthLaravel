@@ -16,7 +16,6 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
         username: user.username,
         email: user.email,
         phone: user.phone,
-        role: user.role,
     });
 
     const submit: FormEventHandler = (e) => {
@@ -97,28 +96,6 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
 
                     <InputError className="mt-2" message={errors.phone} />
                 </div>
-                {/* <div>
-                    <InputLabel htmlFor="role" value="Role" />
-                        <Checkbox
-                            id="role"
-                            name="role"
-                            value="residential"
-                            checked={data.role === 'residential'}
-                            onChange={(e) => setData('role', e.target.value)}
-                        >
-                            Residential
-                        </Checkbox>
-                        <Checkbox
-                            id="role"
-                            name="role"
-                            value="commercial"
-                            checked={data.role === 'commercial'}
-                            onChange={(e) => setData('role', e.target.value)}
-                        >
-                            Commercial
-                        </Checkbox>
-                    <InputError className="mt-2" message={errors.role} />
-                </div> */}
 
                 {mustVerifyEmail && user.email_verified_at === null && (
                     <div>

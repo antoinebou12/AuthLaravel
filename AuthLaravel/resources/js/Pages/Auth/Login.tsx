@@ -41,6 +41,7 @@ export default function Login({
                 ...data,
                 input_type: value,
                 // username: username,
+                email: email,
             });
         } else {
             // remove username from data object optional
@@ -55,7 +56,14 @@ export default function Login({
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route("login"));
+        // show error if post request is not sent correctly
+        if (!data.input_type) {
+            setData("input_type", "Please enter your email or username");
+        }
+        if (!data.password) {
+            setData("password", "Please enter your password");
+        }
+        let error = post(route("login"));
     };
 
     return (

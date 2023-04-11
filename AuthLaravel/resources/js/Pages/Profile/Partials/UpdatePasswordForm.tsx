@@ -5,6 +5,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { useForm } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
+import PasswordStrengthBar from 'react-password-strength-bar';
 
 export default function UpdatePasswordForm({ className = '' }: { className?: string }) {
     const passwordInput = useRef<HTMLInputElement>();
@@ -38,7 +39,7 @@ export default function UpdatePasswordForm({ className = '' }: { className?: str
 
     return (
         <section className={className}>
-            <header>
+            <header className="space-y-1">
                 <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">Update Password</h2>
 
                 <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
@@ -47,7 +48,7 @@ export default function UpdatePasswordForm({ className = '' }: { className?: str
             </header>
 
             <form onSubmit={updatePassword} className="mt-6 space-y-6">
-                <div>
+                <div className="space-y-1">
                     <InputLabel htmlFor="current_password" value="Current Password" />
 
                     <TextInput
@@ -63,9 +64,8 @@ export default function UpdatePasswordForm({ className = '' }: { className?: str
                     <InputError message={errors.current_password} className="mt-2" />
                 </div>
 
-                <div>
+                <div className="space-y-1">
                     <InputLabel htmlFor="password" value="New Password" />
-
                     <TextInput
                         id="password"
                         ref={passwordInput}
@@ -76,10 +76,11 @@ export default function UpdatePasswordForm({ className = '' }: { className?: str
                         autoComplete="new-password"
                     />
 
+                    <PasswordStrengthBar password={data.password} />
                     <InputError message={errors.password} className="mt-2" />
                 </div>
 
-                <div>
+                <div className="space-y-1">
                     <InputLabel htmlFor="password_confirmation" value="Confirm Password" />
 
                     <TextInput

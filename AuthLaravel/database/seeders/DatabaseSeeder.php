@@ -18,8 +18,8 @@ class DatabaseSeeder extends Seeder
             'username' => 'admin',
             'email' => 'admin@example.com',
             'phone' => '1234567890',
-            'phone' => '2345678901',
-            'role' => 'admin',
+            'roles' => 'roles:admin',
+            'permissions' => 'permissions:admin',
             'password' => bcrypt('password'),
             'login_attempts' => 0,
         ]);
@@ -29,7 +29,8 @@ class DatabaseSeeder extends Seeder
             'username' => 'defaultuser',
             'phone' => '2345678901',
             'email' => 'user@example.com',
-            'role' => 'user',
+            'roles' => 'roles:user',
+            'permissions' => 'permissions:user',
             'password' => bcrypt('password'),
             'login_attempts' => 0,
         ]);
@@ -39,7 +40,8 @@ class DatabaseSeeder extends Seeder
             'username' => 'residential',
             'email' => 'residential@example.com',
             'phone' => '3456789012',
-            'role' => 'residential',
+            'roles' => 'roles:residential',
+            'permissions' => 'permissions:user',
             'password' => bcrypt('password'),
             'login_attempts' => 0,
         ]);
@@ -49,7 +51,8 @@ class DatabaseSeeder extends Seeder
             'username' => 'business',
             'email' => 'business@example.com',
             'phone' => '4567890123',
-            'role' => 'business',
+            'roles' => 'roles:business',
+            'permissions' => 'permissions:user',
             'password' => bcrypt('password'),
             'login_attempts' => 0,
         ]);

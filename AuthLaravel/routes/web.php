@@ -27,12 +27,13 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    if (Auth::user()->hasRoles('admin')) {
+        $users = \App\Models\User::all();
+        return Inertia::render('AdminDashboard', ['users' => $users]);
+    } else {
+        return Inertia::render('Dashboard');
+    }
 })->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::get('/admin_dashboard', function () {
-    return Inertia::render('AdminDashboard');
-})->middleware(['auth', 'hasrole:admin'])->name('admin_dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -40,32 +41,63 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::group(['middleware' => ['auth', 'user'], 'prefix' => 'user'], function () {
-    Route::get('/', 'HomeController@index')->name('user_dashboard');
-    Route::get('/list', 'UserController@list')->name('user_list');
-});
+Route::get('/forgot-password', function () {
+    return Inertia::render('Auth/ForgotPassword');
+})->middleware('guest')->name('password.request');
 
-// admin protected routes
-Route::group(['middleware' => ['auth', 'hasrole:admin'], 'prefix' => 'admin'], function () {
-    Route::get('/', 'HomeController@index')->name('admin_dashboard');
-    Route::get('/users', 'AdminUserController@list')->name('admin_users');
-});
+Route::get('/admin', function () {
+    if (Auth::user()->hasRoles('admin')) {
+        // PASS ALL USERS TO REQUEST
+        $users = \App\Models\User::all();
+        return Inertia::render('AdminDashboard', ['users' => $users]);
+    } else {
+        return redirect()->route('dashboard');
+    }
+    return redirect()->route('dashboard');
+})->middleware(['admin'])->name('admin');
 
-// Route::get('/forgot-password', function () {
-//     return Inertia::render('Auth/ForgotPassword');
-// })->middleware('guest')->name('password.request');
+Route::post('/forgot-password', function (Request $request) {
+    $request->validate(['email' => 'required|email']);
 
-// Route::post('/forgot-password', function (Request $request) {
-//     $request->validate(['email' => 'required|email']);
+    $status = Password::sendResetLink(
+        $request->only('email')
+    );
 
-//     $status = Password::sendResetLink(
-//         $request->only('email')
-//     );
+    return $status === Password::RESET_LINK_SENT
+                ? back()->with(['status' => __($status)])
+                : back()->withErrors(['email' => __($status)]);
+})->middleware('guest')->name('password.email');
 
-//     return $status === Password::RESET_LINK_SENT
-//                 ? back()->with(['status' => __($status)])
-//                 : back()->withErrors(['email' => __($status)]);
-// })->middleware('guest')->name('password.email');
+
+Route::get('/reset-password/{token}', function (string $token) {
+    return view('auth.reset-password', ['token' => $token]);
+})->middleware('guest')->name('password.reset');
+
+Route::post('/reset-password', function (Request $request) {
+    $request->validate([
+        'token' => 'required',
+        'email' => 'required|email',
+        'password' => 'required|min:8|confirmed',
+    ]);
+
+    $status = Password::reset(
+        $request->only('email', 'password', 'password_confirmation', 'token'),
+        function (User $user, string $password) {
+            $user->forceFill([
+                'password' => Hash::make($password)
+            ])->setRememberToken(Str::random(60));
+
+            $user->save();
+
+            event(new PasswordReset($user));
+        }
+    );
+
+    return $status === Password::PASSWORD_RESET
+                ? redirect()->route('login')->with('status', __($status))
+                : back()->withErrors(['email' => [__($status)]]);
+})->middleware('guest')->name('password.update');
+
 
 
 // Route::get('/auth/redirect', function () {
@@ -88,35 +120,5 @@ Route::group(['middleware' => ['auth', 'hasrole:admin'], 'prefix' => 'admin'], f
 
 //     return redirect('/dashboard');
 // });
-
-// Route::get('/reset-password/{token}', function (string $token) {
-//     return view('auth.reset-password', ['token' => $token]);
-// })->middleware('guest')->name('password.reset');
-
-// Route::post('/reset-password', function (Request $request) {
-//     $request->validate([
-//         'token' => 'required',
-//         'email' => 'required|email',
-//         'password' => 'required|min:8|confirmed',
-//     ]);
-
-//     $status = Password::reset(
-//         $request->only('email', 'password', 'password_confirmation', 'token'),
-//         function (User $user, string $password) {
-//             $user->forceFill([
-//                 'password' => Hash::make($password)
-//             ])->setRememberToken(Str::random(60));
-
-//             $user->save();
-
-//             event(new PasswordReset($user));
-//         }
-//     );
-
-//     return $status === Password::PASSWORD_RESET
-//                 ? redirect()->route('login')->with('status', __($status))
-//                 : back()->withErrors(['email' => [__($status)]]);
-// })->middleware('guest')->name('password.update');
-
 
 require __DIR__.'/auth.php';

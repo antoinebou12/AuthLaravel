@@ -21,6 +21,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'role',
         'name',
         'email',
+        'phone',
         'password',
         'provider',
         'provider_id',
@@ -60,8 +61,14 @@ class User extends Authenticatable implements MustVerifyEmail
         return $username;
     }
 
-    public function hasRole($role)
+    public function hasRoles($roles)
     {
-        return $this->role === 'role:'.$role;
+        return $this->roles === 'roles:'.$roles;
+    }
+
+    public function hasPermissions($permissions)
+    {
+        return $this->permissions === 'permissions:'.$permissions;
     }
 }
+

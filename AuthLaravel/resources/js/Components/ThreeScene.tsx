@@ -2,13 +2,23 @@
 import React, { useRef, useEffect } from "react";
 import * as THREE from "three";
 
-const ThreeScene = () => {
+const ThreeScene = (
+    props: React.DetailedHTMLProps<
+        React.HTMLAttributes<HTMLDivElement>,
+        HTMLDivElement
+    >
+) => {
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const width = window.innerWidth * 0.8;
-        const height = window.innerHeight * 0.8;
+        const width = window.innerWidth * 0.5;
+        const height = window.innerHeight * 0.5;
         const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xFFFFFF);
+        scene.fog = new THREE.Fog(0xFFFFFF, 0, 1000);
+        scene.add(new THREE.AmbientLight(0x404040));
+        scene.add(new THREE.DirectionalLight(0xffffff, 0.5));
+        scene.scale.set(0.5, 0.5, 0.5);
         const camera = new THREE.PerspectiveCamera(
             75,
             width / height,

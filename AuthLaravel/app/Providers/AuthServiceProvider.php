@@ -29,7 +29,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         ResetPassword::createUrlUsing(function ($user, string $token) {
-            return 'http://localhost/reset-password?token='.$token;
+            return env('APP_URL') . '/reset-password/' . $token . '?email=' . urlencode($user->email);
         });
         VerifyEmail::toMailUsing(function ($notifiable, $url) {
             return (new MailMessage)

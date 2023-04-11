@@ -34,13 +34,19 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        // get the user model
+        $user = Auth::user();
+
         // fill the user model with the custom columns
-        Auth::user()->fill([
-            'browser' => $this->getBrowser($_SERVER['HTTP_USER_AGENT']),
-            'os' => $this->getOS($_SERVER['HTTP_USER_AGENT']),
-            'ip' => $_SERVER['REMOTE_ADDR'],
+        $user->fill([
+            'browser' => $this->getBrowser( $request->header('User-Agent') ),
+            'os' => $this->getOS( $request->header('User-Agent') ),
+            'ip' => $request->ip(),
             'last_login' => now()
         ]);
+
+        // save the user model
+        $user->save();
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }
@@ -51,9 +57,19 @@ class AuthenticatedSessionController extends Controller
     public function destroy(Request $request): RedirectResponse
     {
 
-        Auth::user()->fill([
+        // get the user model
+        $user = $request->user();
+
+        // fill the user model with the custom columns
+        $user->fill([
+            'browser' => $this->getBrowser( $request->header('User-Agent') ),
+            'os' => $this->getOS( $request->header('User-Agent') ),
+            'ip' => $request->ip(),
             'last_logout' => now()
         ]);
+
+        // save the user model
+        $user->save();
 
         Auth::guard('web')->logout();
 

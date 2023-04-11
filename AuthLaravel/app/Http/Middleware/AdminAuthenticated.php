@@ -24,14 +24,17 @@ class AdminAuthenticated
             $user = Auth::user();
 
             // if user is not admin take him to his dashboard
-            if ( $user->hasRole('user') ) {
+            if ( $user->hasRoles('user') ) {
                 return redirect(route('dashboard'));
             }
 
             // allow admin to proceed with request
-            else if ( $user->hasRole('admin') ) {
-                return $next($request);
+            else if ( $user->hasRoles('admin') ) {
+                // add all users in db to request
+                $request->merge(['users' => User::all()]);
             }
+
+            return $next($request);
         }
 
         abort(403);  // permission denied error

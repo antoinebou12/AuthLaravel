@@ -15,7 +15,8 @@ export default function Register() {
         username: '',
         email: '',
         phone: '',
-        role: '',
+        roles: '',
+        permissions: 'permissions:user',
         password: '',
         password_confirmation: '',
     });
@@ -35,8 +36,16 @@ export default function Register() {
             recaptchaRef.current?.execute();
         }
 
-        if (data.role === '') {
-            setData('role', 'residential');
+        if (data.roles === '') {
+            setData('roles', 'roles:residential');
+        }
+
+        if (data.permissions === '') {
+            setData('permissions', 'permissions:user');
+        }
+
+        if (data.username === '') {
+            setData('username', data.username);
         }
 
         post(route('register'));
@@ -46,7 +55,7 @@ export default function Register() {
         <GuestLayout>
             <Head title="Register" />
             <form onSubmit={submit}>
-                <div>
+                <div className="mt-4">
                     <InputLabel htmlFor="name" value="Name" />
 
                     <TextInput
@@ -62,7 +71,7 @@ export default function Register() {
                     <InputError message={errors.name} className="mt-2" />
                 </div>
 
-                <div>
+                <div className="mt-4">
                     <InputLabel htmlFor="username" value="Username" />
 
                     <TextInput
@@ -100,7 +109,7 @@ export default function Register() {
                         type="tel"
                         name="phone"
                         value={data.phone}
-                        className="mt-1 block"
+                        className="mt-1 block w-full"
                         autoComplete="phone"
                         onChange={(e) => setData('phone', e.target.value)}
                         required
@@ -111,14 +120,14 @@ export default function Register() {
                 <div className="mt-4">
                     <div className="flex">
                         <div className="flex-grow">
-                            <InputLabel htmlFor="ResidentialRole" value="Residential" />
+                            <InputLabel htmlFor="ResidentialRoles" value="Residential" />
                             <Checkbox
-                                id="ResidentialRole"
-                                name="ResidentialRole"
-                                value="residential"
+                                id="ResidentialRoles"
+                                name="ResidentialRoles"
+                                value="residentialCheck"
                                 className="mt-1 block"
-                                checked={data.role === 'residential'}
-                                onChange={(e) => setData('role', e.target.checked ? 'residential' : '')}
+                                disabled={data.roles === 'roles:business'}
+                                onChange={(e) => setData('roles', e.target.checked ? 'roles:residential' : '')}
                             />
                         </div>
                         <div className="flex-grow">
@@ -126,15 +135,16 @@ export default function Register() {
                             <Checkbox
                                 id="BusinessRole"
                                 name="BusinessRole"
-                                value="business"
+                                value="businessCheck"
                                 className="mt-1 block"
-                                checked={data.role === 'business'}
-                                onChange={(e) => setData('role', e.target.checked ? 'business' : '')}
+                                disabled={data.roles === 'roles:residential'}
+                                onChange={(e) => setData('roles', e.target.checked ? 'roles:business' : '')}
                             />
                         </div>
                     </div>
-                    <InputError message={errors.role} className="mt-2" />
                 </div>
+
+                <InputError message={errors.roles} className="mt-2" />
 
                 <div className="mt-4">
                     <InputLabel htmlFor="password" value="Password" />
@@ -174,7 +184,7 @@ export default function Register() {
                 <ReCAPTCHA
                     ref={recaptchaRef}
                     size="invisible"
-                    sitekey="6LcZy9IZAAA"
+                    sitekey="6LefQHklAAAAAC79lja2IdZBq9BpOC5I7qIuEv9i"
                 />
 
                 <div className="flex items-center justify-end mt-4">
